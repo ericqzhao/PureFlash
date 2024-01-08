@@ -57,7 +57,7 @@ int PfDispatcher::delete_volume(uint64_t  vol_id)
 	{
 		PfVolume* vol = pos->second;
 		vol->dec_ref();
-		opened_volumes.erase(pos)
+		opened_volumes.erase(pos);
 	}
 	return 0;
 }

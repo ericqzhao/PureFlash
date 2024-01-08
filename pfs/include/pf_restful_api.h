@@ -133,6 +133,7 @@ void from_json(const nlohmann::json& j, RestfulReply& p) ;
 void from_json(const nlohmann::json& j, ReplicaArg& p);
 void from_json(const nlohmann::json& j, ShardArg& p);
 void from_json(const nlohmann::json& j, PrepareVolumeArg& p);
+void from_json(const nlohmann::json& j, DeleteVolumeArg& p);
 void from_json(const nlohmann::json& j, GetSnapListReply& p) ;
 void to_json(nlohmann::json& j, const RestfulReply& r);
 void to_json(nlohmann::json& j, const BackgroudTaskReply& r);
