@@ -296,6 +296,25 @@ void handle_prepare_volume(struct mg_connection *nc, struct http_message * hm)
 	RestfulReply r(arg.op + "_reply");
 	send_reply_to_client(r, nc);
 }
+
+void handle_delete_volume(struct mg_connection *nc, struct http_message * hm)
+{
+	string vol_name = get_http_param_as_string(&hm->query_string, "name", NULL, true);
+	S5LOG_INFO("Receive delete volume req===========\n%.*s\n============", (int)hm->body.len, hm->body.p);
+	auto j = json::parse(hm->body.p, hm->body.p + hm->body.len);
+	DeleteVolumeArg arg = j.get<DeleteVolumeArg>();
+	int rc = 0;
+	for(auto d : app_context.disps)
+	{
+		rc = d->sync_invoke([d, arg.volume_id]()->int {return d->delete_volume(volume_id);});
+		assert(rc == 0);
+	}
+	S5LOG_INFO("Succeeded delete volume:%s", arg.volume_name.c_str());
+
+	RestfulReply r(arg.op + "_reply");
+	send_reply_to_client(r, nc);
+}
+
 void handle_set_snap_seq(struct mg_connection *nc, struct http_message * hm) {
 	int64_t vol_id = get_http_param_as_int64(&hm->query_string, "volume_id", 0, true);
 	int snap_seq = (int)get_http_param_as_int64(&hm->query_string, "snap_seq", 0, true);
